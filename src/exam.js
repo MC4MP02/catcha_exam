@@ -16,7 +16,7 @@ const Catcha = function (challenge) {
   let auxArray = new Array(9);
   let convulted = convolutedCryptoProvider(challenge);
 
-  this.getImages = () => {
+  let calcArray = () => {
     return new Promise((resolve, reject) => {
       convulted.then((res) => {
         auxArray[0] = res.boolean;
@@ -44,19 +44,7 @@ const Catcha = function (challenge) {
 
                       res8.next().then((res9) => {
                         auxArray[8] = res9.boolean;
-                        let catsIndex = 0;
-                        let bikesIndex = 0;
-                        console.log(auxArray);
-                        let finalImages = auxArray.map((el) => {
-                          if (el == true) {
-                            catsIndex++;
-                            return `/public/img/cat${catsIndex}.png`;
-                          } else {
-                            bikesIndex++;
-                            return `/public/img/bike${bikesIndex}.png`;
-                          }
-                        });
-                        resolve(finalImages);
+                        resolve();
                       });
                     });
                   });
@@ -69,17 +57,38 @@ const Catcha = function (challenge) {
     });
   };
 
+  this.getImages = () => {
+    return new Promise((resolve, reject) => {
+      calcArray().then(() => {
+        let catsIndex = 0;
+        let bikesIndex = 0;
+        let finalImages = auxArray.map((el) => {
+          if (el == true) {
+            catsIndex++;
+            return `/public/img/cat${catsIndex}.png`;
+          } else {
+            bikesIndex++;
+            return `/public/img/bike${bikesIndex}.png`;
+          }
+        });
+        resolve(finalImages);
+      });
+    });
+  };
+
   this.checkAnswer = (selected) => {
     return new Promise((resolve, reject) => {
-      let result = true;
-      if (auxArray.filter(Boolean).length == selected.length) {
-      }
-      auxArray.forEach((el, index) => {
-        if (el != selected[index]) {
-          result = false;
+      calcArray().then(() => {
+        let result = true;
+        if (auxArray.length == selected.length) {
+          auxArray.forEach((el, index) => {
+            if (el != selected[index]) {
+              result = false;
+            }
+          });
+          resolve(result);
         }
       });
-      resolve(result);
     });
   };
 };
