@@ -1,7 +1,7 @@
 <script>
 import SelectableImageComponent from './components/SelectableImageComponent.vue'
 export default {
-  components:{
+  components: {
     SelectableImageComponent,
   },
   data() {
@@ -47,4 +47,3 @@ export default {
   <button v-on:click="isSelected = images.map(() => false)">Reset</button>
   <button v-on:click="postAnswer">Validate</button> {{ answer }}
 </template>
-
