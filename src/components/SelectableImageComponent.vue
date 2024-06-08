@@ -16,6 +16,8 @@ export default {
         border(newVal) {
             if (newVal != 'none') {
                 this.$emit('update:modelValue', true)
+            } else {
+                this.$emit('update:modelValue', false)
             }
         }
     }
